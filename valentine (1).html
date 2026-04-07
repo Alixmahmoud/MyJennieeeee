@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Will You Be Mine? 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+  /* ── PALETTE ── tweak these 6 variables to change every color ── */
+  :root {
+    --rose:       #e84393;   /* primary accent – buttons, headings   */
+    --rose-deep:  #c0386b;   /* darker rose for text / hover         */
+    --rose-soft:  #f5b8d4;   /* mid tone – borders, secondary text   */
+    --rose-blush: #fff0f7;   /* page background tint                 */
+    --petal:      #fff7fb;   /* card / surface background            */
+    --text-dark:  #5a1a35;   /* body copy                            */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, #ffd6ec55, transparent),
+      radial-gradient(ellipse 60% 50% at 80% 90%, #ffc6e455, transparent),
+      linear-gradient(160deg, var(--rose-blush) 0%, #fff4f9 50%, #fff0fa 100%);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: var(--text-dark);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── floating bg petals ── */
+  .bg-petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .petal-dot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.13;
+    background: var(--rose);
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    0%   { transform: translateY(0)   rotate(0deg);   }
+    100% { transform: translateY(-60px) rotate(25deg); }
+  }
+
+  /* ── card ── */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: var(--petal);
+    border: 1.5px solid var(--rose-soft);
+    border-radius: 28px;
+    padding: 3rem 2.8rem 2.5rem;
+    max-width: 400px;
+    width: 92vw;
+    text-align: center;
+    box-shadow:
+      0 2px 0 var(--rose-soft),
+      0 8px 40px #e8439322,
+      0 32px 80px #c0386b11;
+  }
+
+  /* ── bear ── */
+  .bear {
+    font-size: 72px;
+    display: block;
+    margin-bottom: 0.75rem;
+    animation: heartbeat 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px #e8439344);
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1);    }
+    14%     { transform: scale(1.10); }
+    28%     { transform: scale(1);    }
+    42%     { transform: scale(1.06); }
+    56%     { transform: scale(1);    }
+  }
+
+  /* ── typography ── */
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: 1.8rem;
+    color: var(--rose-deep);
+    margin-bottom: 0.4rem;
+    line-height: 1.25;
+  }
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--rose-soft);
+    letter-spacing: 0.03em;
+    margin-bottom: 2.2rem;
+    min-height: 1.3em;
+    transition: color 0.4s;
+  }
+
+  /* ── button row ── */
+  .btn-area {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* YES */
+  .btn-yes {
+    background: var(--rose);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    padding: 0.65em 1.7em;
+    cursor: pointer;
+    box-shadow: 0 4px 20px #e8439355;
+    transition: transform 0.2s, background 0.2s, font-size 0.35s, padding 0.35s, box-shadow 0.2s;
+  }
+  .btn-yes:hover {
+    background: var(--rose-deep);
+    transform: scale(1.06);
+    box-shadow: 0 6px 28px #c0386b66;
+  }
+
+  /* NO */
+  .btn-no {
+    background: transparent;
+    color: var(--rose-soft);
+    border: 1.5px solid var(--rose-soft);
+    border-radius: 999px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    padding: 0.5em 1.2em;
+    cursor: pointer;
+    transition: background 0.2s, font-size 0.35s, padding 0.35s, opacity 0.35s;
+  }
+  .btn-no:hover { background: #ffe6f2; }
+
+  /* ── nudge message ── */
+  .no-msg {
+    font-size: 0.8rem;
+    color: var(--rose-soft);
+    margin-top: 1.2rem;
+    min-height: 1.1em;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    transition: opacity 0.4s;
+  }
+
+  /* ── divider ── */
+  .divider {
+    width: 48px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--rose-soft), transparent);
+    margin: 1.6rem auto 0;
+  }
+
+  /* ══ GIFT SCREEN ══ */
+  .gift-screen, .opened-screen { display: none; flex-direction: column; align-items: center; }
+
+  .gift-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--rose-deep);
+    margin-bottom: 1rem;
+  }
+  .gift-box {
+    font-size: 88px;
+    cursor: pointer;
+    display: inline-block;
+    animation: gift-wiggle 1.4s ease-in-out infinite;
+    filter: drop-shadow(0 6px 20px #e8439366);
+    transition: transform 0.15s;
+  }
+  .gift-box:hover { transform: scale(1.1); }
+  @keyframes gift-wiggle {
+    0%,100% { transform: rotate(-7deg) scale(1);    }
+    50%      { transform: rotate( 7deg) scale(1.08); }
+  }
+  .gift-hint {
+    font-size: 0.82rem;
+    color: var(--rose-soft);
+    letter-spacing: 0.05em;
+    margin-top: 0.75rem;
+    font-style: italic;
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  /* ══ OPENED SCREEN ══ */
+  .opened-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--rose-deep);
+    margin-bottom: 0.5rem;
+  }
+  .opened-sub {
+    font-size: 0.95rem;
+    color: var(--rose-soft);
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+  .roses { font-size: 48px; margin-bottom: 1rem; animation: heartbeat 2s infinite; }
+  .love-note {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    line-height: 1.8;
+    max-width: 270px;
+  }
+  .signature {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--rose-soft);
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+
+  /* ══ PARTICLES ══ */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-30px) rotate(0deg)   scale(1);   opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(540deg) scale(0.5); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- floating background orbs -->
+<div class="bg-petals" id="bgPetals"></div>
+
+<div class="card" id="card">
+
+  <!-- ── QUESTION SCREEN ── -->
+  <div id="questionScreen">
+    <span class="bear">🐻</span>
+    <h1>Will you be my Valentine?</h1>
+    <p class="subtitle" id="subtitle">pretty please? 🌸</p>
+    <div class="btn-area">
+      <button class="btn-yes" id="btnYes" onclick="sayYes()">Yes! 💕</button>
+      <button class="btn-no"  id="btnNo"  onclick="pressNo()">No</button>
+    </div>
+    <p class="no-msg" id="noMsg"></p>
+    <div class="divider"></div>
+  </div>
+
+  <!-- ── GIFT SCREEN ── -->
+  <div class="gift-screen" id="giftScreen">
+    <p class="gift-label">You said yes! 🎉</p>
+    <div class="gift-box" id="giftBox" onclick="openGift()">🎁</div>
+    <p class="gift-hint">tap the gift to open it ✨</p>
+  </div>
+
+  <!-- ── OPENED SCREEN ── -->
+  <div class="opened-screen" id="openedScreen">
+    <div class="opened-title">I love you! 💖</div>
+    <div class="opened-sub">you make my heart bloom every single day</div>
+    <div class="roses">🌹🌹🌹</div>
+    <p class="love-note">
+      You are the most beautiful person in my world.<br>
+      Thank you for being mine, always. 🥰
+    </p>
+    <p class="signature">— forever yours 💌</p>
+  </div>
+
+</div>
+
+<script>
+  /* ── background orbs ── */
+  (function(){
+    const bg = document.getElementById('bgPetals');
+    for (let i = 0; i < 22; i++) {
+      const d = document.createElement('div');
+      d.className = 'petal-dot';
+      const size = 8 + Math.random() * 28;
+      d.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        top:${20+Math.random()*75}%;
+        animation-duration:${5+Math.random()*8}s;
+        animation-delay:${Math.random()*6}s;
+      `;
+      bg.appendChild(d);
+    }
+  })();
+
+  /* ── NO button logic ── */
+  let noCount = 0;
+  const nudges = [
+    "are you sure? 🥺",
+    "please reconsider…",
+    "my heart is breaking 💔",
+    "one more chance?",
+    "but I made you cookies…",
+    "the teddy bear is crying 😢",
+    "last chance, I promise!",
+    "…really?",
+    "ok fine… just kidding 🙏",
+    "you have no choice now 😂"
+  ];
+
+  function pressNo() {
+    noCount++;
+    const no  = document.getElementById('btnNo');
+    const yes = document.getElementById('btnYes');
+    const msg = document.getElementById('noMsg');
+    const sub = document.getElementById('subtitle');
+
+    const noSize   = Math.max(0.3, 0.85 - noCount * 0.08) + 'rem';
+    const yesFsize = Math.min(2.4, 1 + noCount * 0.18) + 'rem';
+    const noPadV   = Math.max(1, 8 - noCount * 0.8);
+    const noPadH   = Math.max(4, 19 - noCount * 1.8);
+
+    no.style.fontSize = noSize;
+    no.style.padding  = `${noPadV}px ${noPadH}px`;
+    yes.style.fontSize = yesFsize;
+    yes.style.padding = `${0.65 + noCount * 0.07}em ${1.7 + noCount * 0.15}em`;
+
+    msg.textContent = nudges[Math.min(noCount - 1, nudges.length - 1)];
+
+    if (noCount >= 3) sub.textContent = "the bear is getting sad 🥺";
+    if (noCount >= 6) sub.textContent = "you're making the flowers wilt…";
+    if (noCount >= 9) {
+      no.style.display = 'none';
+      sub.textContent  = "there's only one option now 💕";
+    }
+  }
+
+  /* ── YES ── */
+  function sayYes() {
+    document.getElementById('questionScreen').style.display = 'none';
+    const g = document.getElementById('giftScreen');
+    g.style.display = 'flex';
+    burst(12, ['💕','✨','🌸','💗']);
+  }
+
+  /* ── Open gift ── */
+  function openGift() {
+    document.getElementById('giftScreen').style.display = 'none';
+    const o = document.getElementById('openedScreen');
+    o.style.display = 'flex';
+    burst(45, ['🌹','💖','💕','🌸','💗','✨','🌷','💝','❤️','🌹','🌺']);
+    setTimeout(() => burst(30, ['🌹','💖','💕','🌸','✨','🌷','💝']), 700);
+    setTimeout(() => burst(20, ['💖','🌹','✨','💕','🌸','🌺']), 1500);
+  }
+
+  /* ── particle helper ── */
+  function burst(count, pool) {
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.textContent = pool[Math.floor(Math.random() * pool.length)];
+        const size = 18 + Math.random() * 20;
+        const dur  = 2 + Math.random() * 2;
+        p.style.cssText = `
+          left:${5 + Math.random() * 90}%;
+          top:0;
+          font-size:${size}px;
+          animation-duration:${dur}s;
+          animation-delay:${Math.random() * 0.4}s;
+        `;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), (dur + 0.8) * 1000);
+      }, Math.random() * 350);
+    }
+  }
+</script>
+</body>
+</html>
